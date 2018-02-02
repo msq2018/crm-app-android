@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">CRM</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">電子信箱</string>
+    <string name="prompt_username">用戶名</string>
+    <string name="prompt_password">密碼</string>
+    <string name="action_sign_in">登入</string>
+    <string name="action_sign_in_short">登入</string>
+    <string name="error_invalid_email">無效的電子信箱</string>
+    <string name="error_invalid_password">密碼太短</string>
+    <string name="error_incorrect_password">密碼不正確</string>
+    <string name="error_field_required">此字段必須填寫</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
