@@ -16,10 +16,17 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_main">Dashboard</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+    <!--Dashboard-->
+    <string name="header_title_activity_main">Dashboard</string>
+    <string name="content_title_activity_main">Customer Manage System</string>
+    <!--Orders-->
+    <string name="title_activity_order_list">Orders</string>
+    <!--Customers-->
+    <string name="title_activity_customer_list">Customers</string>
+    <!--Contacts-->
+    <string name="title_activity_contact_list">Contacts</string>
+
 </resources>
