@@ -6,4 +6,17 @@
     android:layout_height="match_parent"
     tools:context="top.onepp.tw.tw_crm.OrderListActivity">
 
+    <LinearLayout
+        android:id="@+id/order_list_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/order_list_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
