@@ -5,17 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="top.onepp.tw.tw_crm.OrderListActivity">
-
     <LinearLayout
         android:id="@+id/order_list_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <!--<android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/order_list_swiperefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <ListView
             android:id="@+id/order_list_box"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>-->
+        <top.onepp.tw.tw_crm.util.SwipeRefreshView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/order_list_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/order_list_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </top.onepp.tw.tw_crm.util.SwipeRefreshView>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

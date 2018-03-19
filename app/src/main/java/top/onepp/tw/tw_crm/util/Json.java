@@ -2,6 +2,7 @@ package top.onepp.tw.tw_crm.util;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +51,33 @@ public class Json {
             e.printStackTrace();
         }
         return  result;
+    }
+
+    public int getInt(JSONObject jsonObject,String name){
+        try {
+            return jsonObject.getInt(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public JSONObject getJSONObject(JSONObject jsonObject, String name){
+        try {
+            return jsonObject.getJSONObject(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONArray getJsonArray(JSONObject jsonObject , String name){
+        try {
+          return jsonObject.getJSONArray(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,16 +40,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.onepp.tw.tw_crm.util.Helper;
 import top.onepp.tw.tw_crm.util.Json;
 
 import static android.Manifest.permission.READ_CONTACTS;
+
+
 
 /**
  * A login screen that offers login via email/password.
@@ -331,14 +338,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private void doLoginIn(Void aVoid) {
             Context context = getApplicationContext();
             RequestQueue queue = Volley.newRequestQueue(context);
-            String url = "http://tw.onepp.top/api/users/";
+            String url = Helper.getConfigValue(LoginActivity.this,"api_login_url");
             StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Json json =Json.init();
                     JSONObject jsonObject = json.parse(response);
                     Boolean status = json.getBoolean(jsonObject,"status");
-                    loginExecute(status);
+                    JSONObject data = json.getJSONObject(jsonObject,"data");
+                    loginExecute(status,data);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -358,21 +366,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             queue.add(request);
         }
 
-        public void loginExecute(final Boolean success){
-            mAuthTask = null;
-            if (success) {
-                SharedPreferences.Editor  editor = preferences.edit();
-                editor.putString("username",mUsername);
-                editor.putString("password",mPassword);
-                editor.commit();
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-                //showProgress(false);
-                finish();
-            } else {
-
-                mPasswordView.setError(getString(R.string.error_incorrect_password_or_username));
-                mPasswordView.requestFocus();
+        public void loginExecute(final Boolean success,JSONObject data){
+            try {
+                mAuthTask = null;
+                if (success) {
+                    SharedPreferences.Editor  editor = preferences.edit();
+                    Integer id = data.getInt("id");
+                    editor.putInt("user_id",id);
+                    editor.putString("user_avatar",data.getString("avatar"));
+                    editor.putString("user_name",data.getString("name"));
+                    editor.putString("user_token",data.getString("token"));
+                    editor.commit();
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    //showProgress(false);
+                    finish();
+                } else {
+                    showProgress(false);
+                    mPasswordView.setError(getString(R.string.error_incorrect_password_or_username));
+                    mPasswordView.requestFocus();
+                }
+            }catch (JSONException e){
+                Log.d("JSON_PRARSE_ERR",e.getMessage());
+            }catch (Exception e){
+               Log.e("USER_LOGIN_ERR",e.getMessage());
             }
         }
 
