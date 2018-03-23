@@ -3,7 +3,7 @@ package top.onepp.tw.tw_crm;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ContactListActivity extends AppCompatActivity {
+public class ContactListActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

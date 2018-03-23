@@ -53,6 +53,17 @@ public class Json {
         return  result;
     }
 
+    public String getString(JSONObject jsonObject,String name){
+        String result = null;
+        try {
+            result = jsonObject.getString(name);
+        } catch (JSONException e) {
+            Log.e("TEST TAG",e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public int getInt(JSONObject jsonObject,String name){
         try {
             return jsonObject.getInt(name);

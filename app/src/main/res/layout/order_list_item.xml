@@ -60,6 +60,12 @@
                 android:layout_weight="1"
                 android:paddingRight="10dp"
                 android:textSize="14sp" />
+            <TextView
+                android:id="@+id/entity_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
         </LinearLayout>
     </LinearLayout>
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="top.onepp.tw.tw_crm.OrderListActivity">
+
     <LinearLayout
         android:id="@+id/order_list_form"
         android:layout_width="match_parent"
@@ -23,17 +24,29 @@
             app:layout_constraintRight_toRightOf="parent" />
 
         </android.support.v4.widget.SwipeRefreshLayout>-->
-        <top.onepp.tw.tw_crm.util.SwipeRefreshView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/order_list_swipe_refresh"
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ListView
-                android:id="@+id/order_list_box"
+            <top.onepp.tw.tw_crm.util.SwipeRefreshView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/order_list_swipe_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-        </top.onepp.tw.tw_crm.util.SwipeRefreshView>
-
+                android:layout_height="match_parent">
+                <ListView
+                    android:id="@+id/order_list_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+            </top.onepp.tw.tw_crm.util.SwipeRefreshView>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@drawable/ic_add_button_white" />
+        </FrameLayout>
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
