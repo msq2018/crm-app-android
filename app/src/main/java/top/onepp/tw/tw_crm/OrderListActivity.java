@@ -1,13 +1,16 @@
 package top.onepp.tw.tw_crm;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,6 +50,7 @@ public class OrderListActivity extends BaseActivity {
     private SwipeRefreshView mSwipeRefreshView;
     private String nextPageUrl;
     private List<Map<String, Object>> mList;
+    private FloatingActionButton addOrderButton;
 
     private TableLayout detailTableLayout;
 
@@ -61,10 +65,10 @@ public class OrderListActivity extends BaseActivity {
 
         orderListBox = findViewById(R.id.order_list_box);
         mSwipeRefreshView = findViewById(R.id.order_list_swipe_refresh);
-
         mSwipeRefreshView.setItemCount(5);
         mSwipeRefreshView.measure(0, 0);
         mSwipeRefreshView.setRefreshing(true);
+        addOrderButton = findViewById(R.id.add_order_button);
         initEvent();
         initData();
     }
@@ -95,6 +99,13 @@ public class OrderListActivity extends BaseActivity {
                 return false;
             }
         });
+        addOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderListActivity.this,OrderNewActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -117,6 +128,7 @@ public class OrderListActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                System.out.println(nextPageUrl);
                 if (!nextPageUrl.equals("null")) {
                     httpOrderListRequest(nextPageUrl, false);
                 } else {
@@ -183,7 +195,8 @@ public class OrderListActivity extends BaseActivity {
             public void onResponse(String response) {
                 Json json = Json.init();
                 JSONObject jsonObject = json.parse(response);
-                nextPageUrl = json.getString(jsonObject, "next_page_url");
+                JSONObject links = json.getJsonObject(jsonObject,"links");
+                nextPageUrl = json.getString(links, "next");
                 JSONArray data = json.getJsonArray(jsonObject, "data");
                 showOrderList(data, status);
             }
@@ -235,82 +248,52 @@ public class OrderListActivity extends BaseActivity {
     }
 
     private void showOrderDetail(JSONObject data) {
-        Map<String, Object> mapResult = Helper.jsonToMap(data);
-        System.out.println(mapResult);
-        AlertDialog.Builder customizeDialog = new AlertDialog.Builder(this);
-        final View dialogView = LayoutInflater.from(OrderListActivity.this)
-                .inflate(R.layout.order_detail, null);
-        detailTableLayout = (TableLayout) dialogView.findViewById(R.id.order_detail_table);
-        int rows = mapResult.size();
-        if (rows != 0) {
-            detailTableLayout.removeAllViewsInLayout();//记得加上这一句，要不然上次查询的结果还是会显示在TableLayout之中
-
-            //动态生成表格。
-            TableRow tablerow = new TableRow(OrderListActivity.this);
-            for (Map.Entry<String, Object> entry : mapResult.entrySet()) {
+        System.out.println(data);
+        try {
+            Map<String, Object> datail = new HashMap<String, Object>();
+            datail.put("Status",data.getString("status"));
+            datail.put("Order Type",data.getString("order_type"));
+            datail.put("Customer",data.getString("customer_id"));
+            datail.put("Order Total",data.getString("order_total"));
+            datail.put("Deal Opportunity",data.getString("deal_opportunity"));
+            datail.put("Product Qty",data.getString("product_qty"));
+            datail.put("Company Name",data.getString("company_name"));
+            datail.put("Order Number",data.getString("order_num"));
+            System.out.println(datail);
+            AlertDialog.Builder customizeDialog = new AlertDialog.Builder(this);
+            final View dialogView = LayoutInflater.from(OrderListActivity.this)
+                    .inflate(R.layout.order_detail, null);
+            detailTableLayout = (TableLayout) dialogView.findViewById(R.id.order_detail_table);
+            for (Map.Entry<String, Object> entry : datail.entrySet()) {
+                TableRow tablerow = new TableRow(getApplicationContext());
                 String key = entry.getKey();
                 Object value = entry.getValue() ;
-                String stringValue = "";
-                if (key.equals("created_at") || key.equals("updated_at") || key.equals("deleted_at") && value instanceof HashMap){
-                    Map<String, Object> timeObject = (Map<String, Object>) entry.getValue();
-                    stringValue = (String) timeObject.get("date");
-                }else if (value instanceof ArrayList){
-                    //todo processing array list
-                }else if (value instanceof Integer){
-                    stringValue = value.toString();
-                }else if (value.equals(null)){
-                    continue;
-                }else{
-                    stringValue = (String) value;
-                }
-                String[] items = {key,stringValue};
-                for (int i=0; i<items.length;i++){
-
-                }
-               TextView keyText = new TextView(OrderListActivity.this);
-                TextView valueText = new TextView(OrderListActivity.this);
-                //text.setPadding(1, 1, 1, 1);
-                //给每以列填充显示的内容
-                keyText.setText(key);
-                valueText.setText(stringValue);
-                tablerow.addView(keyText);
-                tablerow.addView(valueText);
-                // do what you have to do here
-                // In your case, another loop.
+                TextView viewName = new TextView(OrderListActivity.this);
+                TextView viewValue = new TextView(OrderListActivity.this);
+                viewName.setPadding(10,10,10,10);
+                viewValue.setPadding(10,10,10,10);
+                viewName.setText(key.toString());
+                viewValue.setText(value.toString());
+                tablerow.addView(viewName);
+                tablerow.addView(viewValue);
                 detailTableLayout.addView(tablerow);
             }
-            //for (int i = 0; i < rows; i++) {
+            customizeDialog.setIcon(getDrawable(R.drawable.ic_menu_share));
+            customizeDialog.setTitle("我是一个自定义Dialog");
+            customizeDialog.setView(dialogView);
+            customizeDialog.setPositiveButton("确定",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.out.println("test");
+                        }
+                    });
+            customizeDialog.show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
-            //int k = 3;
-
-            //动态生成有边框的单元行，边框的实现是通过table_shape来实现的 ，列的内容来源是从服务端返回得到的List集合里面的内容
-            //for (int j = 0; j < k; j++) {
-
-            //}
-            //这里让自己头疼了很久，因为开始不知道怎样设置某一列的点击事件，汗。。。设置点击监听后，如歌用匿名内部类的话，
-            //String courseDiscription = resultList.get(m).getCoursDisc();因为匿名内部类中取不到外部类的非静态变量的值，所以采用自定义的监听类
-            //记得要自定义一个构造函数，并定义一个参数m，这样好把这里的i的值传入到myListener中的String courseDiscription = resultList.get(m).getCoursDisc();
-            //语句中的m，要不然会报错。
-            //tablerow.getChildAt(1).setOnClickListener(new myListener(i));
-            //detailTableLayout.addView(tablerow);
-
-            //}
-        } /* else {
-                    Toast.makeText(getBaseContext(), "无相关课程!",
-                            Toast.LENGTH_SHORT).show();
-                }*/
-        customizeDialog.setIcon(getDrawable(R.drawable.ic_menu_share));
-        customizeDialog.setTitle("我是一个自定义Dialog");
-        customizeDialog.setView(dialogView);
-        customizeDialog.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("test");
-                    }
-                });
-        customizeDialog.show();
     }
 
 

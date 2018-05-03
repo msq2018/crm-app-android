@@ -103,4 +103,13 @@ public class Json {
             e.printStackTrace();
         }
     }
+
+    public JSONObject getJsonObject(JSONObject jsonObject, String name) {
+        try {
+            return jsonObject.getJSONObject(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

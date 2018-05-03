@@ -25,6 +25,15 @@
     <string name="content_title_activity_main">Customer Manage System</string>
     <!--Orders-->
     <string name="title_activity_order_list">Orders</string>
+    <string name="create_activity_order_new">Create Order</string>
+    <!--Create Order-->
+    <string name="company_name_activity_order_new">Company Name</string>
+    <string name="customer_name_activity_order_new">Customer Name</string>
+    <string name="order_type_activity_order_new">Order Type</string>
+    <string name="product_qty_activity_order_new">Qty</string>
+    <string name="order_total_activity_order_new">Order Total</string>
+    <string name="deal_opportunity_activity_order_new">Deal Opportunity</string>
+    <string name="order_remark_activity_order_new">Remark</string>
     <!--Customers-->
     <string name="title_activity_customer_list">Customers</string>
     <!--Contacts-->
@@ -32,4 +41,16 @@
 
     <string name="no_more_data">No More Data</string>
     <string name="action_add">Add</string>
+    <string name="status">Status</string>
+
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>
